@@ -85,4 +85,52 @@
 
   const year = document.getElementById("year");
   if (year) year.textContent = String(new Date().getFullYear());
+
+  // About media-stage slideshow (~4s)
+  const stage = document.querySelector("[data-about-slideshow]");
+  if (stage) {
+    const slides = Array.from(stage.querySelectorAll(".about-slide"));
+    const dots = Array.from(stage.querySelectorAll(".about-dot"));
+    let idx = 0;
+    let timer = null;
+    const INTERVAL = 4000;
+
+    function show(n) {
+      if (!slides.length) return;
+      idx = ((n % slides.length) + slides.length) % slides.length;
+      slides.forEach((s, i) => s.classList.toggle("is-active", i === idx));
+      dots.forEach((d, i) => d.classList.toggle("is-active", i === idx));
+    }
+
+    function next() {
+      show(idx + 1);
+    }
+
+    function start() {
+      stop();
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      timer = setInterval(next, INTERVAL);
+    }
+
+    function stop() {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+    }
+
+    dots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        const n = parseInt(dot.getAttribute("data-slide"), 10);
+        if (!Number.isNaN(n)) show(n);
+        start();
+      });
+    });
+
+    stage.addEventListener("mouseenter", stop);
+    stage.addEventListener("mouseleave", start);
+    show(0);
+    start();
+  }
+
 })();
