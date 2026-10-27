@@ -100,32 +100,24 @@
     <section id="about" class="section about">
       <div class="wrap">
         <div class="about-grid">
-          <div class="about-stage" data-about-slideshow aria-label="GTAELON gallery slideshow">
-            <div class="about-slides">
-              <img class="about-slide is-active" src="img/gallery/01-statue.jpg" alt="GTAELON statue pedestal scene" loading="eager">
-              <img class="about-slide" src="img/gallery/02-walk.jpg" alt="GTAELON walk bandana sunset" loading="lazy">
-              <img class="about-slide" src="img/gallery/03-tactical.jpg" alt="GTAELON tactical gear" loading="lazy">
-              <img class="about-slide" src="img/gallery/04-couple.jpg" alt="GTAELON couple scene" loading="lazy">
-              <img class="about-slide" src="img/gallery/05-club.jpg" alt="GTAELON nightclub dance" loading="lazy">
-              <img class="about-slide" src="img/gallery/06-sunset.jpg" alt="GTAELON romantic sunset" loading="lazy">
-              <img class="about-slide" src="img/gallery/07-tank.jpg" alt="GTAELON tank top chase" loading="lazy">
-              <img class="about-slide" src="img/gallery/08-tee.jpg" alt="GTAELON tee collage" loading="lazy">
-            </div>
-            <div class="about-dots" role="tablist" aria-label="Slideshow controls">
-              <button type="button" class="about-dot is-active" aria-label="Slide 1" data-slide="0"></button>
-              <button type="button" class="about-dot" aria-label="Slide 2" data-slide="1"></button>
-              <button type="button" class="about-dot" aria-label="Slide 3" data-slide="2"></button>
-              <button type="button" class="about-dot" aria-label="Slide 4" data-slide="3"></button>
-              <button type="button" class="about-dot" aria-label="Slide 5" data-slide="4"></button>
-              <button type="button" class="about-dot" aria-label="Slide 6" data-slide="5"></button>
-              <button type="button" class="about-dot" aria-label="Slide 7" data-slide="6"></button>
-              <button type="button" class="about-dot" aria-label="Slide 8" data-slide="7"></button>
-            </div>
+          <!-- About media stage: swap src/poster to drop in the next video -->
+          <div class="about-stage" aria-label="GTAELON about video">
+            <video
+              class="about-video"
+              src="img/about-jetski.mp4"
+              poster="img/about-jetski-poster.jpg"
+              controls
+              playsinline
+              loop
+              autoplay
+              muted
+              preload="metadata"
+            ></video>
           </div>
 
           <div class="about-right">
             <p class="about-eyebrow"><span class="dot"></span><span>About / The Slogan</span><span class="bar"></span></p>
-            <h2 class="display-lg">THE NEW SLOGAN<br>OF <span class="red">LEONIDA.</span></h2>
+            <h2 class="about-title">The new slogan of<br><span class="accent">Leonida</span>.</h2>
             <div class="about-body">
               <p>
                 <b>“Oh! lol — new USA president Elon Musk is coming to GTAVI soon”</b> started as a line.
@@ -144,8 +136,14 @@
               <span class="about-pill"><span class="dot"></span><b>Mint</b>&nbsp;Pending</span>
             </div>
             <div class="about-cta-row">
-              <a class="btn btn-red js-buy" href="#" data-label="Buy $GTAELON">Buy $GTAELON</a>
-              <a class="btn btn-ghost js-x" href="https://x.com/" target="_blank" rel="noopener">Watch on X ↗</a>
+              <a class="about-cta about-cta-1 js-x" href="https://x.com/" target="_blank" rel="noopener noreferrer">
+                <span>Watch on X</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+              </a>
+              <a class="about-cta about-cta-2 js-buy" href="#" data-label="Buy $GTAELON">
+                <span>Buy $GTAELON</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
             </div>
           </div>
         </div>

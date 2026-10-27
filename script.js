@@ -22,6 +22,12 @@
     el.rel = "noopener";
   });
 
+  function setBuyLabel(el, text) {
+    const span = el.querySelector("span");
+    if (span) span.textContent = text;
+    else el.textContent = text;
+  }
+
   document.querySelectorAll(".js-buy").forEach((el) => {
     if (launched) {
       el.href = buyUrl;
@@ -29,7 +35,7 @@
       el.rel = "noopener";
       el.removeAttribute("aria-disabled");
       el.classList.remove("is-disabled");
-      if (el.dataset.label) el.textContent = el.dataset.label;
+      if (el.dataset.label) setBuyLabel(el, el.dataset.label);
     } else {
       el.href = "#";
       el.setAttribute("aria-disabled", "true");
@@ -37,11 +43,13 @@
       el.addEventListener("click", (e) => e.preventDefault());
       const label = el.dataset.label || "Buy $GTAELON";
       if (/pump\.fun/i.test(label) && label.length < 16) {
-        el.textContent = "Coming Soon";
+        setBuyLabel(el, "Coming Soon");
       } else if (/^Open$/i.test(label)) {
-        el.textContent = "Coming Soon";
+        setBuyLabel(el, "Coming Soon");
+      } else if (el.classList.contains("about-cta")) {
+        setBuyLabel(el, "Buy · Soon");
       } else {
-        el.textContent = "Buy $GTAELON · Coming Soon";
+        setBuyLabel(el, "Buy $GTAELON · Coming Soon");
       }
     }
   });
@@ -85,52 +93,5 @@
 
   const year = document.getElementById("year");
   if (year) year.textContent = String(new Date().getFullYear());
-
-  // About media-stage slideshow (~4s)
-  const stage = document.querySelector("[data-about-slideshow]");
-  if (stage) {
-    const slides = Array.from(stage.querySelectorAll(".about-slide"));
-    const dots = Array.from(stage.querySelectorAll(".about-dot"));
-    let idx = 0;
-    let timer = null;
-    const INTERVAL = 4000;
-
-    function show(n) {
-      if (!slides.length) return;
-      idx = ((n % slides.length) + slides.length) % slides.length;
-      slides.forEach((s, i) => s.classList.toggle("is-active", i === idx));
-      dots.forEach((d, i) => d.classList.toggle("is-active", i === idx));
-    }
-
-    function next() {
-      show(idx + 1);
-    }
-
-    function start() {
-      stop();
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-      timer = setInterval(next, INTERVAL);
-    }
-
-    function stop() {
-      if (timer) {
-        clearInterval(timer);
-        timer = null;
-      }
-    }
-
-    dots.forEach((dot) => {
-      dot.addEventListener("click", () => {
-        const n = parseInt(dot.getAttribute("data-slide"), 10);
-        if (!Number.isNaN(n)) show(n);
-        start();
-      });
-    });
-
-    stage.addEventListener("mouseenter", stop);
-    stage.addEventListener("mouseleave", start);
-    show(0);
-    start();
-  }
 
 })();
