@@ -4,8 +4,8 @@ window.SITE = {
   symbol: "GTAELON",
   ticker: "$GTAELON",
   chain: "Solana",
-  ca: "6GaNPFwUv3P7K8nzFRXLba4hnabdmrjiKofmr5Qkpump",
-  launched: true,
+  ca: "CommingSoon",
+  launched: false,
   x: "https://x.com/GTA_ELON",
   buyBase: "https://pump.fun/coin/",
 };
