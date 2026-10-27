@@ -57,6 +57,17 @@
   const status = document.querySelector(".js-status");
   if (status) {
     status.textContent = launched ? "Live now" : "Mint pending";
+    const chip = status.closest(".live");
+    if (chip) {
+      chip.style.color = launched ? "" : "#2de2e6";
+      chip.style.borderColor = launched ? "" : "rgba(45,226,230,.35)";
+      chip.style.background = launched ? "" : "rgba(45,226,230,.08)";
+      const d = chip.querySelector(".dot");
+      if (d && !launched) {
+        d.style.background = "#2de2e6";
+        d.style.boxShadow = "0 0 8px #2de2e6";
+      }
+    }
   }
 
   document.querySelectorAll("#copy, .js-copy").forEach((copyBtn) => {
