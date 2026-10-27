@@ -108,6 +108,7 @@
     "img/gallery/06-sunset.jpg",
     "img/gallery/07-tank.jpg",
     "img/gallery/08-tee.jpg",
+    "img/gallery/09-kiss-rain.jpg",
   ];
   const IMAGE_MS = 1000;
 
