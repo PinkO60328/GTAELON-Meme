@@ -94,22 +94,66 @@
   const year = document.getElementById("year");
   if (year) year.textContent = String(new Date().getFullYear());
 
-  // About video playlist: advance to next clip on ended, then loop forever
+  // About media playlist: videos → gallery images (1s each) → videos → …
   const ABOUT_VIDEOS = [
     { src: "img/about-jetski.mp4", poster: "img/about-jetski-poster.jpg" },
     { src: "img/about-dirt-bike.mp4", poster: "img/about-dirt-bike-poster.jpg" },
   ];
+  const ABOUT_IMAGES = [
+    "img/gallery/01-statue.jpg",
+    "img/gallery/02-walk.jpg",
+    "img/gallery/03-tactical.jpg",
+    "img/gallery/04-couple.jpg",
+    "img/gallery/05-club.jpg",
+    "img/gallery/06-sunset.jpg",
+    "img/gallery/07-tank.jpg",
+    "img/gallery/08-tee.jpg",
+  ];
+  const IMAGE_MS = 1000;
+
+  const aboutStage = document.querySelector(".about-stage");
   const aboutVideo = document.querySelector(".about-video");
-  if (aboutVideo && ABOUT_VIDEOS.length) {
-    let aboutIndex = 0;
-    // Align index with whatever src is already on the element
-    const currentSrc = aboutVideo.getAttribute("src") || "";
-    const found = ABOUT_VIDEOS.findIndex((v) => currentSrc.endsWith(v.src) || currentSrc.includes(v.src));
-    if (found >= 0) aboutIndex = found;
+  const aboutSlide = document.querySelector(".about-slide");
+
+  if (aboutStage && aboutVideo && ABOUT_VIDEOS.length) {
+    let videoIndex = 0;
+    let imageIndex = 0;
+    let imageTimer = null;
+    let phase = "video"; // "video" | "images"
+
+    function clearImageTimer() {
+      if (imageTimer != null) {
+        clearTimeout(imageTimer);
+        imageTimer = null;
+      }
+    }
+
+    function showVideo() {
+      phase = "video";
+      clearImageTimer();
+      if (aboutSlide) {
+        aboutSlide.classList.add("is-hidden");
+        aboutSlide.removeAttribute("src");
+      }
+      aboutVideo.classList.remove("is-hidden");
+      aboutVideo.controls = true;
+    }
+
+    function showImage() {
+      phase = "images";
+      clearImageTimer();
+      try {
+        aboutVideo.pause();
+      } catch (_) {}
+      aboutVideo.classList.add("is-hidden");
+      aboutVideo.controls = false;
+      if (aboutSlide) aboutSlide.classList.remove("is-hidden");
+    }
 
     function loadAboutClip(i, shouldPlay) {
       const clip = ABOUT_VIDEOS[i % ABOUT_VIDEOS.length];
-      aboutIndex = i % ABOUT_VIDEOS.length;
+      videoIndex = i % ABOUT_VIDEOS.length;
+      showVideo();
       aboutVideo.poster = clip.poster;
       aboutVideo.src = clip.src;
       aboutVideo.load();
@@ -119,12 +163,41 @@
       }
     }
 
+    function showGalleryImage(i) {
+      if (!ABOUT_IMAGES.length || !aboutSlide) {
+        loadAboutClip(0, true);
+        return;
+      }
+      imageIndex = i;
+      showImage();
+      aboutSlide.src = ABOUT_IMAGES[imageIndex];
+      imageTimer = setTimeout(() => {
+        if (imageIndex + 1 < ABOUT_IMAGES.length) {
+          showGalleryImage(imageIndex + 1);
+        } else {
+          // Slideshow finished → back to first video
+          loadAboutClip(0, true);
+        }
+      }, IMAGE_MS);
+    }
+
+    function startImageSlideshow() {
+      showGalleryImage(0);
+    }
+
     aboutVideo.addEventListener("ended", () => {
-      loadAboutClip(aboutIndex + 1, true);
+      if (phase !== "video") return;
+      if (videoIndex + 1 < ABOUT_VIDEOS.length) {
+        loadAboutClip(videoIndex + 1, true);
+      } else {
+        // Last video ended → gallery slideshow
+        startImageSlideshow();
+      }
     });
 
-    // Kick muted autoplay (browser policy); if blocked, user play still advances on ended
+    // Kick muted autoplay
     aboutVideo.muted = true;
+    showVideo();
     const start = aboutVideo.play();
     if (start && typeof start.catch === "function") start.catch(() => {});
   }

@@ -455,7 +455,8 @@ code { font-family: var(--mono); font-size: .9em; }
   background: #0a0d18;
   box-shadow: 0 26px 60px rgba(0,0,0,.45), 0 0 40px rgba(220,38,56,.1);
 }
-.about-video {
+.about-video,
+.about-slide {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -463,6 +464,13 @@ code { font-family: var(--mono); font-size: .9em; }
   object-fit: cover;
   background: #000;
   z-index: 3;
+}
+.about-video.is-hidden,
+.about-slide.is-hidden {
+  display: none;
+}
+.about-slide {
+  z-index: 4;
 }
 .about-right {
   display: flex;
