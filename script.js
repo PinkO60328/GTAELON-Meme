@@ -12,16 +12,8 @@
   document.querySelectorAll(".js-ca").forEach((el) => {
     el.textContent = ca;
   });
-  document.querySelectorAll(".js-ca-short").forEach((el) => {
-    el.textContent = launched
-      ? ca.slice(0, 4) + "…" + ca.slice(-4)
-      : "Coming Soon";
-  });
   document.querySelectorAll(".js-chain").forEach((el) => {
     el.textContent = cfg.chain || "Solana";
-  });
-  document.querySelectorAll(".js-ticker").forEach((el) => {
-    el.textContent = cfg.ticker || "$GTAELON";
   });
 
   document.querySelectorAll(".js-x").forEach((el) => {
@@ -43,27 +35,30 @@
       el.setAttribute("aria-disabled", "true");
       el.classList.add("is-disabled");
       el.addEventListener("click", (e) => e.preventDefault());
-      el.textContent = "Buy $GTAELON · Coming Soon";
+      const label = el.dataset.label || "Buy $GTAELON";
+      if (/pump\.fun/i.test(label) && label.length < 16) {
+        el.textContent = "Coming Soon";
+      } else if (/^Open$/i.test(label)) {
+        el.textContent = "Coming Soon";
+      } else {
+        el.textContent = "Buy $GTAELON · Coming Soon";
+      }
     }
   });
 
-  const hint = document.querySelector(".js-buy-hint");
-  if (hint) {
+  document.querySelectorAll(".js-buy-hint").forEach((hint) => {
     hint.textContent = launched
       ? "Buy routes to pump.fun with this mint."
       : "Buy unlocks when a real Solana CA is published.";
-  }
+  });
 
   const status = document.querySelector(".js-status");
   if (status) {
-    status.textContent = launched ? "Live now" : "Mint pending";
-    const chip = status.closest(".live");
-    if (chip) {
-      chip.style.color = launched ? "" : "#2de2e6";
-      chip.style.borderColor = launched ? "" : "rgba(45,226,230,.35)";
-      chip.style.background = launched ? "" : "rgba(45,226,230,.08)";
+    status.textContent = launched ? "Live now" : "Coming Soon";
+    const chip = status.closest(".chip-live");
+    if (chip && !launched) {
       const d = chip.querySelector(".dot");
-      if (d && !launched) {
+      if (d) {
         d.style.background = "#2de2e6";
         d.style.boxShadow = "0 0 8px #2de2e6";
       }
@@ -89,18 +84,5 @@
   });
 
   const year = document.getElementById("year");
-  if (year) year.textContent = new Date().getFullYear();
-
-  const io = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((en) => {
-        if (en.isIntersecting) {
-          en.target.classList.add("in");
-          io.unobserve(en.target);
-        }
-      });
-    },
-    { threshold: 0.12 }
-  );
-  document.querySelectorAll(".rv").forEach((el) => io.observe(el));
+  if (year) year.textContent = String(new Date().getFullYear());
 })();
