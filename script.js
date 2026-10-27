@@ -94,4 +94,39 @@
   const year = document.getElementById("year");
   if (year) year.textContent = String(new Date().getFullYear());
 
+  // About video playlist: advance to next clip on ended, then loop forever
+  const ABOUT_VIDEOS = [
+    { src: "img/about-jetski.mp4", poster: "img/about-jetski-poster.jpg" },
+    { src: "img/about-dirt-bike.mp4", poster: "img/about-dirt-bike-poster.jpg" },
+  ];
+  const aboutVideo = document.querySelector(".about-video");
+  if (aboutVideo && ABOUT_VIDEOS.length) {
+    let aboutIndex = 0;
+    // Align index with whatever src is already on the element
+    const currentSrc = aboutVideo.getAttribute("src") || "";
+    const found = ABOUT_VIDEOS.findIndex((v) => currentSrc.endsWith(v.src) || currentSrc.includes(v.src));
+    if (found >= 0) aboutIndex = found;
+
+    function loadAboutClip(i, shouldPlay) {
+      const clip = ABOUT_VIDEOS[i % ABOUT_VIDEOS.length];
+      aboutIndex = i % ABOUT_VIDEOS.length;
+      aboutVideo.poster = clip.poster;
+      aboutVideo.src = clip.src;
+      aboutVideo.load();
+      if (shouldPlay) {
+        const p = aboutVideo.play();
+        if (p && typeof p.catch === "function") p.catch(() => {});
+      }
+    }
+
+    aboutVideo.addEventListener("ended", () => {
+      loadAboutClip(aboutIndex + 1, true);
+    });
+
+    // Kick muted autoplay (browser policy); if blocked, user play still advances on ended
+    aboutVideo.muted = true;
+    const start = aboutVideo.play();
+    if (start && typeof start.catch === "function") start.catch(() => {});
+  }
+
 })();
